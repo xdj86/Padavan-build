@@ -31,15 +31,25 @@ jobs:
         cpio git python-docutils gettext automake autopoint texinfo build-essential help2man \
         pkg-config zlib1g-dev libgmp3-dev libmpc-dev libmpfr-dev libncurses5-dev libltdl-dev wget
     - name: Clone source code
+      env:
+        KERNEL: 4.4
       run: |
+       ## git clone --depth=1 https://github.com/zcmhi/Padavan.git /opt/padavan
+       ## cd /opt/padavan/toolchain-mipsel
+        if [ $KERNEL = "4.4" ] ; then
+        git clone --depth=1 https://github.com/MeIsReallyBa/padavan-4.4.git /opt/padavan
+        else
         git clone --depth=1 https://github.com/zcmhi/Padavan.git /opt/padavan
+        fi
         cd /opt/padavan/toolchain-mipsel
+       
         sh dl_toolchain.sh
         mkdir -p /opt/images/
     
     - name: Build Firmware
       env:
         TNAME: XY-C1
+        KERNEL: 4.4
       run: |
         cd /opt/padavan/trunk
         if [ ! -f configs/templates/$TNAME.config ] ; then
